@@ -48,7 +48,7 @@ const TracksPlayer = forwardRef(({className, defaultSelected, disabledIndexes, d
       </div>
       <div className={css.text}>
         <div className={css.label}>{data.label}</div>
-        <div className={css.description}>{audioRefs.current.length} audio stems included</div>
+        <div className={css.description}>{audioRefs.current.length - disabledIndexes.length} audio stems included</div>
       </div>
       {!!audioRefs.current[0].duration && <div className={css.duration}>
         <span className={css.currentPlayed}>{currentTime}</span> / <span>{new Date(audioRefs.current[0].duration * 1000).toISOString().substr(11, 8)}</span>
