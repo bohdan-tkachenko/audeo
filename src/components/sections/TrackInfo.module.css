@@ -1,0 +1,16 @@
+.label {
+  color: #686868;
+  font-size: 12px;
+}
+.container > h1 {
+  font-size: 32px;
+  font-weight: 500;
+  margin: 8px 0 12px;
+}
+
+.container > button {
+  background: #097bed;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 12px;
+}

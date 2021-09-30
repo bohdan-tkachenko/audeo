@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  align-items: center;
+  padding: 12px 48px;
+  background: #1b202b;
+}
+.text {
+  flex: 1;
+  margin-left: 8px;
+}
+.label {
+  font-size: 14px;
+}
+.description {
+  color: #686868;
+}
+.actions button + button {
+  margin-left: 8px;
+}
+.duration {
+  color: #686868;
+}
+.currentPlayed {
+  color: #fff;
+}

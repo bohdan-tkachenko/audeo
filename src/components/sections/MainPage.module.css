@@ -1,0 +1,17 @@
+.container {
+  width: 100%;
+  background: #080D19;
+  display: flex;
+  flex-direction: column;
+}
+.trackInfo {
+  margin-top: 32px;
+  margin-left: 48px;
+  margin-bottom: 24px;
+}
+.trackPlayer {
+  margin: 0 16px;
+}
+.audioPlayers {
+  flex: 1;
+}
