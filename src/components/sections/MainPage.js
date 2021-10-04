@@ -1,80 +1,90 @@
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import clsx from 'clsx';
 import css from './MainPage.module.css';
 import PageHead from './PageHead';
 import TrackInfo from './TrackInfo';
 import TrackPlayer from './TrackPlayer';
-import TracksPlayer from './TracksPlayer';
+import MainPlayer from './MainPlayer';
+import { setOpenGroupId, updateMainTracks } from '../../features/main/mainSlice';
 import constants from '../../constants';
 
 function MainPage() {
-	const playersRef = useRef(new Array(constants.AUDIO_TRACK_DATA.data.length));
-  const [disabledTrackIndexes, setDisabledTrackIds] = useState([]);
-  const tracksPlayerRef = useRef();
-  const [selectedAudios, setSelectedAudios] = useState(constants.AUDIO_TRACK_DATA.data.map(item => item.data[0]));
-  const handleSelectNext = useCallback((index) => {
-    const audios = selectedAudios.concat();
-    let shouldSkip = false;
-    constants.AUDIO_TRACK_DATA.data[index].data.forEach((item, idx) => {
-      if (shouldSkip) return;
-
-      if (audios[index].id === item.id) {
-        if (constants.AUDIO_TRACK_DATA.data[index].data[idx + 1]) {
-          audios[index] = constants.AUDIO_TRACK_DATA.data[index].data[idx + 1];
-        } else {
-          audios[index] = constants.AUDIO_TRACK_DATA.data[index].data[0];
-        }
-        shouldSkip = true;
-      }
-    })
-    setSelectedAudios(audios);
-
-    tracksPlayerRef.current.stop();
+	const playersRef = useRef({});
+  const mainPlayerRef = useRef();
+  const dispatch = useDispatch()
+  const mainTracks = useSelector((state) => state.main.mainTracks)
+  const openGroupId = useSelector((state) => state.main.openGroupId)
+  const handleSelectActive = useCallback((group, track) => {
+    Object.values(playersRef.current).forEach((value) => {
+      value.stop();
+    });
+    dispatch(setOpenGroupId(null));
     setTimeout(() => {
-      tracksPlayerRef.current.updateTracks(audios);
+      dispatch(updateMainTracks({group, track}));
     })
-  }, [selectedAudios]);
+  }, [dispatch])
+
+  useEffect(() => {
+    mainPlayerRef.current.stop();
+    setTimeout(() => {
+      mainPlayerRef.current.refresh();
+    })
+  }, [mainTracks]);
+
+  const handleSwitchClick = useCallback((group, track) => {
+    if (openGroupId === group.id) {
+      dispatch(setOpenGroupId(null));
+    } else {
+      dispatch(setOpenGroupId(group.id));
+    }
+  }, [dispatch, openGroupId]);
 
 
-  const handleTrackPlay = useCallback((index) => {
-    playersRef.current.forEach((item, idx) => {
-      if (index !== idx) {
-        item.stop();
+  const handleTrackPlay = useCallback((trackItem) => {
+    Object.entries(playersRef.current).forEach(([key, value]) => {
+      if (!trackItem || trackItem.id !== key) {
+        value.stop();
       }
     });
-    if (index !== undefined) {
-      tracksPlayerRef.current.stop();
+    if (trackItem) {
+      mainPlayerRef.current.stop();
     }
   }, []);
-
-  const handleDisableToggle = useCallback(index => {
-    let newDisabledIds = disabledTrackIndexes.concat();
-    let trackIndex = disabledTrackIndexes.indexOf(index);
-    if (trackIndex >= 0) {
-      newDisabledIds = disabledTrackIndexes.filter(trackIndex => trackIndex !== index);
-    } else {
-      newDisabledIds.push(index);
-    }
-    setDisabledTrackIds(newDisabledIds);
-    tracksPlayerRef.current.stop();
-  }, [disabledTrackIndexes]);
 
   return (
     <div className={css.container}>
       <PageHead/>
       <TrackInfo className={css.trackInfo} data={constants.AUDIO_TRACK_DATA}/>
       <div className={css.audioPlayers}>
-        {constants.AUDIO_TRACK_DATA.data.map((trackItem, index) => <TrackPlayer
-          ref={(r) => {playersRef.current[index] = r}}
-          key={trackItem.id}
-          className={css.trackPlayer}
-          selected={selectedAudios[index]}
-          disabled={disabledTrackIndexes.includes(index)}
-          onNext={() => handleSelectNext(index)}
-          onPlay={() => handleTrackPlay(index)}
-          onDisableToggle={() => handleDisableToggle(index)}
-        />)}
+        {mainTracks.map((track, index) => {
+          const group = constants.AUDIO_TRACK_DATA.groups[index];
+          return <div key={track.id} className={clsx(openGroupId === group.id && css.active)}>
+            <TrackPlayer
+              ref={(r) => {playersRef.current[track.id] = r}}
+              key={track.id}
+              className={css.trackPlayer}
+              track={track}
+              onSwitch={() => handleSwitchClick(group, track)}
+              hideSwitch={group.tracks.length === 1}
+              activeSwitch={openGroupId === group.id}
+              onPlay={() => handleTrackPlay(track)}
+            />
+            <div className={css.collapse}>
+              {group.tracks.filter(t => t.id !== track.id).map(trackItem => <TrackPlayer
+                ref={(r) => {playersRef.current[trackItem.id] = r}}
+                key={trackItem.id}
+                className={css.trackPlayer}
+                track={trackItem}
+                isSubTrack
+                onSelect={() => handleSelectActive(group, trackItem)}
+                onPlay={() => handleTrackPlay(trackItem)}
+              />)}
+            </div>
+          </div>
+        })}
       </div>
-      <TracksPlayer ref={r => tracksPlayerRef.current = r} defaultSelected={selectedAudios} disabledIndexes={disabledTrackIndexes} data={constants.AUDIO_TRACK_DATA} onPlay={() => handleTrackPlay()}/>
+      <MainPlayer ref={r => mainPlayerRef.current = r} onPlay={() => handleTrackPlay()}/>
     </div>
   );
 }

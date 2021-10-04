@@ -11,11 +11,11 @@ import VibraphoneMp3 from '../assets/audios/AUD_Jazz_LazyBlues_Vibraphone.mp3';
 const AUDIO_TRACK_DATA = {
   id: 'LAZY_BLUES',
   label: 'Lazy Blues, 113 BPM, C major',
-  data: [
+  groups: [
     {
       id: 'DRUMS',
       label: 'Drums',
-      data: [
+      tracks: [
         {
           id: 'BRUSHES',
           label: 'Brushes',
@@ -31,7 +31,7 @@ const AUDIO_TRACK_DATA = {
     {
       id: 'BASS',
       label: 'Bass',
-      data: [
+      tracks: [
         {
           id: 'ACOUSTIC',
           label: 'Acoustic',
@@ -47,7 +47,7 @@ const AUDIO_TRACK_DATA = {
     {
       id: 'KEYBOARD',
       label: 'Keyboard',
-      data: [
+      tracks: [
         {
           id: 'ELECTRIC_PIANO',
           label: 'Electric Piano',
@@ -63,7 +63,7 @@ const AUDIO_TRACK_DATA = {
     {
       id: 'MELODY_1',
       label: 'Melody 1',
-      data: [
+      tracks: [
         {
           id: 'WHISTLE',
           label: 'Whistle',
@@ -79,7 +79,7 @@ const AUDIO_TRACK_DATA = {
     {
       id: 'MELODY_2',
       label: 'Melody 2',
-      data: [
+      tracks: [
         {
           id: 'VIBRAPHONE',
           label: 'Vibraphone',

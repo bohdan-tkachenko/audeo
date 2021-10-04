@@ -6,12 +6,19 @@
 }
 .trackInfo {
   margin-top: 32px;
-  margin-left: 48px;
+  margin-left: 32px;
   margin-bottom: 24px;
-}
-.trackPlayer {
-  margin: 0 16px;
 }
 .audioPlayers {
   flex: 1;
+  padding: 0 16px;
+}
+.collapse {
+  display: none;
+}
+.active .collapse {
+  display: block;
+}
+.active {
+  background: #2D5175;
 }
