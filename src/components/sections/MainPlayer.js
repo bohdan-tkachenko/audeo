@@ -37,7 +37,6 @@ const MainPlayer = forwardRef(({className, onPlay}, ref) => {
       audioRefs.current.forEach(item => {
         interval && clearInterval(interval);
         item.pause();
-        item.currentTime = 0;
       });
     }
   }, [playing, onPlay, muteTrackIds, mainTracks]);
@@ -45,6 +44,9 @@ const MainPlayer = forwardRef(({className, onPlay}, ref) => {
   useImperativeHandle(ref, () => ({
     stop() {
       setPlaying(false);
+    },
+    play() {
+      setPlaying(true);
     },
     refresh() {
       mainTracks.forEach((item, index) => {

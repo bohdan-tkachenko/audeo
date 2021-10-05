@@ -34,7 +34,6 @@ const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hid
       audioRef.current.play();
     } else {
       audioRef.current.pause();
-      audioRef.current.currentTime = 0;
     }
   }, [playing, onPlay]);
 
@@ -42,6 +41,12 @@ const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hid
     stop() {
       setPlaying(false);
     },
+    play() {
+      setPlaying(true);
+    },
+    playing() {
+      return playing;
+    }
 	}));
 
   return (

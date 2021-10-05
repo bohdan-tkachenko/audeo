@@ -8,6 +8,7 @@ import TrackPlayer from './TrackPlayer';
 import MainPlayer from './MainPlayer';
 import { setOpenGroupId, updateMainTracks } from '../../features/main/mainSlice';
 import constants from '../../constants';
+let stoppedTrackIdBySwitch = null;
 
 function MainPage() {
 	const playersRef = useRef({});
@@ -16,9 +17,16 @@ function MainPage() {
   const mainTracks = useSelector((state) => state.main.mainTracks)
   const openGroupId = useSelector((state) => state.main.openGroupId)
   const handleSelectActive = useCallback((group, track) => {
-    Object.values(playersRef.current).forEach((value) => {
-      value.stop();
-    });
+    const groupIndex = constants.AUDIO_TRACK_DATA.groups.findIndex(g => g.id === group.id);
+
+    if (groupIndex > -1) {
+      constants.AUDIO_TRACK_DATA.groups[groupIndex].tracks.forEach(track => {
+        if (groupIndex > -1 && playersRef.current[track.id].playing()) {
+          playersRef.current[track.id].stop();
+          stoppedTrackIdBySwitch = track.id;
+        }
+      });
+    }
     dispatch(setOpenGroupId(null));
     setTimeout(() => {
       dispatch(updateMainTracks({group, track}));
@@ -29,6 +37,10 @@ function MainPage() {
     mainPlayerRef.current.stop();
     setTimeout(() => {
       mainPlayerRef.current.refresh();
+      if (stoppedTrackIdBySwitch && !playersRef.current[stoppedTrackIdBySwitch].playing()) {
+        playersRef.current[stoppedTrackIdBySwitch].play();
+        stoppedTrackIdBySwitch = null;
+      }
     })
   }, [mainTracks]);
 
