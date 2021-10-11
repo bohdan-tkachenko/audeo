@@ -1,45 +1,48 @@
 
 import clsx from 'clsx';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import constants from '../../constants';
+import { setMainPlayerCurrentTIme } from '../../features/main/mainSlice';
 import css from './MainPlayer.module.css';
 
 let interval = null;
 
 const MainPlayer = forwardRef(({className, onPlay}, ref) => {
   const mainTracks = useSelector((state) => state.main.mainTracks)
+  const dispatch = useDispatch()
   const muteTrackIds = useSelector(state => state.main.muteTrackIds)
+  const mainPlayerCurrentTime = useSelector(state => state.main.mainPlayerCurrentTime)
   const [playing, setPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState('00:00');
-  const audioRefs = useRef(mainTracks.map(item => (new Audio(item.url))))
+  const audioRefs = useRef(constants.MAIN_AUDIOS)
+
   useEffect(() => {
     if (playing) {
-      const shouldPlay = audioRefs.current[0].paused;
-      audioRefs.current.forEach((item, index) => {
-        if (muteTrackIds.includes(mainTracks[index].id)) {
-          item.muted = true;
-        } else {
-          item.muted = false;
-
-          if (shouldPlay) {
-            item.play();
-          }
-        }
+      Object.keys(audioRefs.current).forEach(itemId => {
+        audioRefs.current[itemId].play();
       });
-      if (shouldPlay) {
-        onPlay();
-        setInterval(() => {
-          setCurrentTime(new Date(audioRefs.current[0].currentTime * 1000).toISOString().substr(14, 5));
-        }, 1000);
-      }
+      onPlay();
+      interval = setInterval(() => {
+        dispatch(setMainPlayerCurrentTIme(audioRefs.current.BRUSHES.currentTime))
+      }, 1000);
     } else {
-      audioRefs.current.forEach(item => {
-        interval && clearInterval(interval);
+      interval && clearInterval(interval);
+      Object.values(audioRefs.current).forEach(item => {
         item.pause();
       });
     }
-  }, [playing, onPlay, muteTrackIds, mainTracks]);
+  }, [playing, onPlay, dispatch]);
+
+  useEffect(() => {
+    const mainTracksIds = mainTracks.map(track => track.id);
+    Object.keys(audioRefs.current).forEach((itemId) => {
+      if (muteTrackIds.includes(itemId) || !mainTracksIds.includes(itemId)) {
+        audioRefs.current[itemId].muted = true;
+      } else {
+        audioRefs.current[itemId].muted = false;
+      }
+    });
+  }, [muteTrackIds, mainTracks, mainPlayerCurrentTime]);
 
   useImperativeHandle(ref, () => ({
     stop() {
@@ -48,11 +51,6 @@ const MainPlayer = forwardRef(({className, onPlay}, ref) => {
     play() {
       setPlaying(true);
     },
-    refresh() {
-      mainTracks.forEach((item, index) => {
-        audioRefs.current[index] = new Audio(item.url);
-      })
-    }
 	}));
 
   return (
@@ -64,10 +62,10 @@ const MainPlayer = forwardRef(({className, onPlay}, ref) => {
       </div>
       <div className={css.text}>
         <div className={css.label}>{constants.AUDIO_TRACK_DATA.label}</div>
-        <div className={css.description}>{audioRefs.current.length - muteTrackIds.length} audio stems included</div>
+        <div className={css.description}>{mainTracks.length - muteTrackIds.length} audio stems included</div>
       </div>
-      {!!audioRefs.current[0].duration && <div className={css.duration}>
-        <span className={css.currentPlayed}>{currentTime}</span> / <span>{new Date(audioRefs.current[0].duration * 1000).toISOString().substr(14, 5)}</span>
+      {!!audioRefs.current.BRUSHES.duration && <div className={css.duration}>
+        <span className={css.currentPlayed}>{new Date(mainPlayerCurrentTime * 1000).toISOString().substr(14, 5)}</span> / <span>{new Date(audioRefs.current.BRUSHES.duration * 1000).toISOString().substr(14, 5)}</span>
       </div>}
     </div>
   );

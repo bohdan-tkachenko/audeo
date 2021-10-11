@@ -34,14 +34,10 @@ function MainPage() {
   }, [dispatch])
 
   useEffect(() => {
-    mainPlayerRef.current.stop();
-    setTimeout(() => {
-      mainPlayerRef.current.refresh();
-      if (stoppedTrackIdBySwitch && !playersRef.current[stoppedTrackIdBySwitch].playing()) {
-        playersRef.current[stoppedTrackIdBySwitch].play();
-        stoppedTrackIdBySwitch = null;
-      }
-    })
+    if (stoppedTrackIdBySwitch && !playersRef.current[stoppedTrackIdBySwitch].playing()) {
+      playersRef.current[stoppedTrackIdBySwitch].play();
+      stoppedTrackIdBySwitch = null;
+    }
   }, [mainTracks]);
 
   const handleSwitchClick = useCallback((group, track) => {

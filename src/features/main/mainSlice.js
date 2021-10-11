@@ -6,6 +6,7 @@ export const mainSlice = createSlice({
   initialState: {
     mainTracks: constants.AUDIO_TRACK_DATA.groups.map(item => item.tracks[0]), // active audios
     muteTrackIds: [],
+    mainPlayerCurrentTime: 0,
     openGroupId: null,
   },
   reducers: {
@@ -17,6 +18,9 @@ export const mainSlice = createSlice({
     },
     setOpenGroupId: (state, action) => {
       state.openGroupId = action.payload;
+    },
+    setMainPlayerCurrentTIme: (state, action) => {
+      state.mainPlayerCurrentTime = action.payload;
     },
     updateMainTracks: (state, action) => {
       const {group, track} = action.payload;
@@ -31,6 +35,6 @@ export const mainSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addMuteId, removeMuteId, setOpenGroupId, updateMainTracks } = mainSlice.actions
+export const { addMuteId, removeMuteId, setOpenGroupId, updateMainTracks, setMainPlayerCurrentTIme } = mainSlice.actions
 
 export default mainSlice.reducer

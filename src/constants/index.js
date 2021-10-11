@@ -8,6 +8,18 @@ import WhistleMp3 from '../assets/audios/AUD_Jazz_LazyBlues_Whistle.mp3';
 import TrumpetMp3 from '../assets/audios/AUD_Jazz_LazyBlues_Trumpet.mp3';
 import VibraphoneMp3 from '../assets/audios/AUD_Jazz_LazyBlues_Vibraphone.mp3';
 
+const MAIN_AUDIOS = {
+  BRUSHES: new Audio(DrumsBrushesMp3),
+  STICKS: new Audio(DrumsStickMp3),
+  ACOUSTIC: new Audio(AcousticBassMp3),
+  ELECTRIC: new Audio(ElectricBassMp3),
+  ELECTRIC_PIANO: new Audio(ElectricPianoMp3),
+  PIANO: new Audio(PianoMp3),
+  WHISTLE: new Audio(WhistleMp3),
+  TRUMPET: new Audio(TrumpetMp3),
+  VIBRAPHONE: new Audio(VibraphoneMp3)
+}
+
 const AUDIO_TRACK_DATA = {
   id: 'LAZY_BLUES',
   label: 'Lazy Blues, 113 BPM, C major',
@@ -19,12 +31,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'BRUSHES',
           label: 'Brushes',
-          url: DrumsBrushesMp3
+          audio: new Audio(DrumsBrushesMp3),
         },
         {
           id: 'STICKS',
           label: 'Sticks',
-          url: DrumsStickMp3
+          audio: new Audio(DrumsStickMp3),
         }
       ]
     },
@@ -35,12 +47,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'ACOUSTIC',
           label: 'Acoustic',
-          url: AcousticBassMp3
+          audio: new Audio(AcousticBassMp3),
         },
         {
           id: 'ELECTRIC',
           label: 'Electric',
-          url: ElectricBassMp3
+          audio: new Audio(ElectricBassMp3),
         }
       ]
     },
@@ -51,12 +63,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'ELECTRIC_PIANO',
           label: 'Electric Piano',
-          url: ElectricPianoMp3
+          audio: new Audio(ElectricPianoMp3),
         },
         {
           id: 'PIANO',
           label: 'Piano',
-          url: PianoMp3
+          audio: new Audio(PianoMp3),
         }
       ]
     },
@@ -67,12 +79,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'WHISTLE',
           label: 'Whistle',
-          url: WhistleMp3
+          audio: new Audio(WhistleMp3),
         },
         {
           id: 'TRUMPET',
           label: 'Trumpet',
-          url: TrumpetMp3
+          audio: new Audio(TrumpetMp3),
         }
       ]
     },
@@ -83,7 +95,7 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'VIBRAPHONE',
           label: 'Vibraphone',
-          url: VibraphoneMp3
+          audio: new Audio(VibraphoneMp3),
         }
       ]
     },
@@ -91,5 +103,6 @@ const AUDIO_TRACK_DATA = {
 }
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
-  AUDIO_TRACK_DATA
+  AUDIO_TRACK_DATA,
+  MAIN_AUDIOS
 }

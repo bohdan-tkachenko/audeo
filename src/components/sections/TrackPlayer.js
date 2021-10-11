@@ -8,7 +8,7 @@ import css from './TrackPlayer.module.css';
 const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hideSwitch, onSelect, onSwitch, onPlay}, ref) => {
   const muteTrackIds = useSelector(state => state.main.muteTrackIds)
   const dispatch = useDispatch()
-  const audioRef = useRef(new Audio(track.url));
+  const audioRef = useRef(track.audio);
   const [playing, setPlaying] = useState(false);
 
   const handleMuteChange = useCallback(() => {
@@ -24,7 +24,7 @@ const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hid
   useEffect(() => {
     setPlaying(false);
     setTimeout(() => {
-      audioRef.current = new Audio(track.url);
+      audioRef.current = track.audio;
     })
   }, [track]);
 
