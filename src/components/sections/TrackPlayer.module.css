@@ -13,6 +13,17 @@
 }
 .wave {
   flex: 1;
+  position: relative;
+}
+.progressDiv {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #080D19;
+  opacity: 0.5;
 }
 .disabled > .wave {
   opacity: 0.5;

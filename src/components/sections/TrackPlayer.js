@@ -9,6 +9,8 @@ import css from './TrackPlayer.module.css';
 
 const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hideSwitch, onSelect, onSwitch, onPlay}, ref) => {
   const muteTrackIds = useSelector(state => state.main.muteTrackIds)
+  const [currentTime, setCurrentTIme] = useState(0);
+  const [timer, setTimer] = useState();
   const [buffer, setBuffer] = useState();
   const dispatch = useDispatch()
   const audioRef = useRef(new Audio(track.audio));
@@ -35,9 +37,15 @@ const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hid
 
   useEffect(() => {
     if (playing) {
+      const interval = setInterval(() => {
+        setCurrentTIme(audioRef.current.currentTime)
+      }, 1000);
+      setTimer(interval);
       onPlay();
       audioRef.current.play();
     } else {
+      timer && clearInterval(timer);
+      setTimer(null);
       audioRef.current.pause();
     }
   }, [playing, onPlay]);
@@ -63,7 +71,7 @@ const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hid
           // Audio buffer
           buffer={buffer}
           // waveform height
-          height={40}
+          height={50}
           markerStyle={{
             // Position marker color
             color: '#fff',
@@ -90,6 +98,11 @@ const TrackPlayer = forwardRef(({className, track, isSubTrack, activeSwitch, hid
           }}
           width={getWaveWidth()}
         />
+        {audioRef.current && audioRef.current.duration &&
+          <div className={css.progressDiv} style={{
+            left: getWaveWidth() * currentTime/audioRef.current.duration,
+            width: getWaveWidth() * (1 - currentTime/audioRef.current.duration)
+          }}/>}
       </div>
       <div className={css.actions}>
         {isSubTrack ?
