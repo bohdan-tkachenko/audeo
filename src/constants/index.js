@@ -31,12 +31,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'BRUSHES',
           label: 'Brushes',
-          audio: new Audio(DrumsBrushesMp3),
+          audio: DrumsBrushesMp3,
         },
         {
           id: 'STICKS',
           label: 'Sticks',
-          audio: new Audio(DrumsStickMp3),
+          audio: DrumsStickMp3,
         }
       ]
     },
@@ -47,12 +47,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'ACOUSTIC',
           label: 'Acoustic',
-          audio: new Audio(AcousticBassMp3),
+          audio: AcousticBassMp3,
         },
         {
           id: 'ELECTRIC',
           label: 'Electric',
-          audio: new Audio(ElectricBassMp3),
+          audio: ElectricBassMp3,
         }
       ]
     },
@@ -63,12 +63,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'ELECTRIC_PIANO',
           label: 'Electric Piano',
-          audio: new Audio(ElectricPianoMp3),
+          audio: ElectricPianoMp3,
         },
         {
           id: 'PIANO',
           label: 'Piano',
-          audio: new Audio(PianoMp3),
+          audio: PianoMp3,
         }
       ]
     },
@@ -79,12 +79,12 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'WHISTLE',
           label: 'Whistle',
-          audio: new Audio(WhistleMp3),
+          audio: WhistleMp3,
         },
         {
           id: 'TRUMPET',
           label: 'Trumpet',
-          audio: new Audio(TrumpetMp3),
+          audio: TrumpetMp3,
         }
       ]
     },
@@ -95,7 +95,7 @@ const AUDIO_TRACK_DATA = {
         {
           id: 'VIBRAPHONE',
           label: 'Vibraphone',
-          audio: new Audio(VibraphoneMp3),
+          audio: VibraphoneMp3,
         }
       ]
     },
